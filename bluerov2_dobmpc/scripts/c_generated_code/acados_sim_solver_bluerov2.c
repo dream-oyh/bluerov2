@@ -1,8 +1,5 @@
 /*
- * Copyright 2019 Gianluca Frison, Dimitris Kouzoupis, Robin Verschueren,
- * Andrea Zanelli, Niels van Duijkeren, Jonathan Frey, Tommaso Sartor,
- * Branimir Novoselnik, Rien Quirynen, Rezart Qelibari, Dang Doan,
- * Jonas Koenemann, Yutao Chen, Tobias Schöls, Jonas Schlagenhauf, Moritz Diehl
+ * Copyright (c) The acados authors.
  *
  * This file is part of acados.
  *
@@ -51,23 +48,23 @@
 
 // ** solver data **
 
-sim_solver_capsule * bluerov2_acados_sim_solver_create_capsule()
+bluerov2_sim_solver_capsule * bluerov2_acados_sim_solver_create_capsule()
 {
-    void* capsule_mem = malloc(sizeof(sim_solver_capsule));
-    sim_solver_capsule *capsule = (sim_solver_capsule *) capsule_mem;
+    void* capsule_mem = malloc(sizeof(bluerov2_sim_solver_capsule));
+    bluerov2_sim_solver_capsule *capsule = (bluerov2_sim_solver_capsule *) capsule_mem;
 
     return capsule;
 }
 
 
-int bluerov2_acados_sim_solver_free_capsule(sim_solver_capsule * capsule)
+int bluerov2_acados_sim_solver_free_capsule(bluerov2_sim_solver_capsule * capsule)
 {
     free(capsule);
     return 0;
 }
 
 
-int bluerov2_acados_sim_create(sim_solver_capsule * capsule)
+int bluerov2_acados_sim_create(bluerov2_sim_solver_capsule * capsule)
 {
     // initialize
     const int nx = BLUEROV2_NX;
@@ -76,22 +73,25 @@ int bluerov2_acados_sim_create(sim_solver_capsule * capsule)
     const int np = BLUEROV2_NP;
     bool tmp_bool;
 
-    
     double Tsim = 0.0125;
+
+    external_function_opts ext_fun_opts;
+    external_function_opts_set_to_default(&ext_fun_opts);
+    ext_fun_opts.external_workspace = false;
 
     
     // explicit ode
-    capsule->sim_forw_vde_casadi = (external_function_param_casadi *) malloc(sizeof(external_function_param_casadi));
+    capsule->sim_expl_vde_forw = (external_function_param_casadi *) malloc(sizeof(external_function_param_casadi));
     capsule->sim_vde_adj_casadi = (external_function_param_casadi *) malloc(sizeof(external_function_param_casadi));
     capsule->sim_expl_ode_fun_casadi = (external_function_param_casadi *) malloc(sizeof(external_function_param_casadi));
 
-    capsule->sim_forw_vde_casadi->casadi_fun = &bluerov2_expl_vde_forw;
-    capsule->sim_forw_vde_casadi->casadi_n_in = &bluerov2_expl_vde_forw_n_in;
-    capsule->sim_forw_vde_casadi->casadi_n_out = &bluerov2_expl_vde_forw_n_out;
-    capsule->sim_forw_vde_casadi->casadi_sparsity_in = &bluerov2_expl_vde_forw_sparsity_in;
-    capsule->sim_forw_vde_casadi->casadi_sparsity_out = &bluerov2_expl_vde_forw_sparsity_out;
-    capsule->sim_forw_vde_casadi->casadi_work = &bluerov2_expl_vde_forw_work;
-    external_function_param_casadi_create(capsule->sim_forw_vde_casadi, np);
+    capsule->sim_expl_vde_forw->casadi_fun = &bluerov2_expl_vde_forw;
+    capsule->sim_expl_vde_forw->casadi_n_in = &bluerov2_expl_vde_forw_n_in;
+    capsule->sim_expl_vde_forw->casadi_n_out = &bluerov2_expl_vde_forw_n_out;
+    capsule->sim_expl_vde_forw->casadi_sparsity_in = &bluerov2_expl_vde_forw_sparsity_in;
+    capsule->sim_expl_vde_forw->casadi_sparsity_out = &bluerov2_expl_vde_forw_sparsity_out;
+    capsule->sim_expl_vde_forw->casadi_work = &bluerov2_expl_vde_forw_work;
+    external_function_param_casadi_create(capsule->sim_expl_vde_forw, np, &ext_fun_opts);
 
     capsule->sim_vde_adj_casadi->casadi_fun = &bluerov2_expl_vde_adj;
     capsule->sim_vde_adj_casadi->casadi_n_in = &bluerov2_expl_vde_adj_n_in;
@@ -99,7 +99,7 @@ int bluerov2_acados_sim_create(sim_solver_capsule * capsule)
     capsule->sim_vde_adj_casadi->casadi_sparsity_in = &bluerov2_expl_vde_adj_sparsity_in;
     capsule->sim_vde_adj_casadi->casadi_sparsity_out = &bluerov2_expl_vde_adj_sparsity_out;
     capsule->sim_vde_adj_casadi->casadi_work = &bluerov2_expl_vde_adj_work;
-    external_function_param_casadi_create(capsule->sim_vde_adj_casadi, np);
+    external_function_param_casadi_create(capsule->sim_vde_adj_casadi, np, &ext_fun_opts);
 
     capsule->sim_expl_ode_fun_casadi->casadi_fun = &bluerov2_expl_ode_fun;
     capsule->sim_expl_ode_fun_casadi->casadi_n_in = &bluerov2_expl_ode_fun_n_in;
@@ -107,7 +107,7 @@ int bluerov2_acados_sim_create(sim_solver_capsule * capsule)
     capsule->sim_expl_ode_fun_casadi->casadi_sparsity_in = &bluerov2_expl_ode_fun_sparsity_in;
     capsule->sim_expl_ode_fun_casadi->casadi_sparsity_out = &bluerov2_expl_ode_fun_sparsity_out;
     capsule->sim_expl_ode_fun_casadi->casadi_work = &bluerov2_expl_ode_fun_work;
-    external_function_param_casadi_create(capsule->sim_expl_ode_fun_casadi, np);
+    external_function_param_casadi_create(capsule->sim_expl_ode_fun_casadi, np, &ext_fun_opts);
 
     
 
@@ -157,7 +157,7 @@ int bluerov2_acados_sim_create(sim_solver_capsule * capsule)
 
     // model functions
     bluerov2_sim_config->model_set(bluerov2_sim_in->model,
-                 "expl_vde_forw", capsule->sim_forw_vde_casadi);
+                 "expl_vde_forw", capsule->sim_expl_vde_forw);
     bluerov2_sim_config->model_set(bluerov2_sim_in->model,
                  "expl_vde_adj", capsule->sim_vde_adj_casadi);
     bluerov2_sim_config->model_set(bluerov2_sim_in->model,
@@ -165,7 +165,7 @@ int bluerov2_acados_sim_create(sim_solver_capsule * capsule)
 
     // sim solver
     sim_solver *bluerov2_sim_solver = sim_solver_create(bluerov2_sim_config,
-                                               bluerov2_sim_dims, bluerov2_sim_opts);
+                                               bluerov2_sim_dims, bluerov2_sim_opts, bluerov2_sim_in);
     capsule->acados_sim_solver = bluerov2_sim_solver;
 
 
@@ -212,7 +212,7 @@ int bluerov2_acados_sim_create(sim_solver_capsule * capsule)
 }
 
 
-int bluerov2_acados_sim_solve(sim_solver_capsule *capsule)
+int bluerov2_acados_sim_solve(bluerov2_sim_solver_capsule *capsule)
 {
     // integrate dynamics using acados sim_solver
     int status = sim_solve(capsule->acados_sim_solver,
@@ -224,7 +224,20 @@ int bluerov2_acados_sim_solve(sim_solver_capsule *capsule)
 }
 
 
-int bluerov2_acados_sim_free(sim_solver_capsule *capsule)
+void bluerov2_acados_sim_batch_solve(bluerov2_sim_solver_capsule ** capsules, int N_batch)
+{
+
+    for (int i = 0; i < N_batch; i++)
+    {
+        sim_solve(capsules[i]->acados_sim_solver, capsules[i]->acados_sim_in, capsules[i]->acados_sim_out);
+    }
+
+
+    return;
+}
+
+
+int bluerov2_acados_sim_free(bluerov2_sim_solver_capsule *capsule)
 {
     // free memory
     sim_solver_destroy(capsule->acados_sim_solver);
@@ -235,15 +248,18 @@ int bluerov2_acados_sim_free(sim_solver_capsule *capsule)
     sim_config_destroy(capsule->acados_sim_config);
 
     // free external function
-    external_function_param_casadi_free(capsule->sim_forw_vde_casadi);
+    external_function_param_casadi_free(capsule->sim_expl_vde_forw);
     external_function_param_casadi_free(capsule->sim_vde_adj_casadi);
     external_function_param_casadi_free(capsule->sim_expl_ode_fun_casadi);
+    free(capsule->sim_expl_vde_forw);
+    free(capsule->sim_vde_adj_casadi);
+    free(capsule->sim_expl_ode_fun_casadi);
 
     return 0;
 }
 
 
-int bluerov2_acados_sim_update_params(sim_solver_capsule *capsule, double *p, int np)
+int bluerov2_acados_sim_update_params(bluerov2_sim_solver_capsule *capsule, double *p, int np)
 {
     int status = 0;
     int casadi_np = BLUEROV2_NP;
@@ -253,7 +269,7 @@ int bluerov2_acados_sim_update_params(sim_solver_capsule *capsule, double *p, in
             " External function has %i parameters. Exiting.\n", np, casadi_np);
         exit(1);
     }
-    capsule->sim_forw_vde_casadi[0].set_param(capsule->sim_forw_vde_casadi, p);
+    capsule->sim_expl_vde_forw[0].set_param(capsule->sim_expl_vde_forw, p);
     capsule->sim_vde_adj_casadi[0].set_param(capsule->sim_vde_adj_casadi, p);
     capsule->sim_expl_ode_fun_casadi[0].set_param(capsule->sim_expl_ode_fun_casadi, p);
 
@@ -261,32 +277,32 @@ int bluerov2_acados_sim_update_params(sim_solver_capsule *capsule, double *p, in
 }
 
 /* getters pointers to C objects*/
-sim_config * bluerov2_acados_get_sim_config(sim_solver_capsule *capsule)
+sim_config * bluerov2_acados_get_sim_config(bluerov2_sim_solver_capsule *capsule)
 {
     return capsule->acados_sim_config;
 };
 
-sim_in * bluerov2_acados_get_sim_in(sim_solver_capsule *capsule)
+sim_in * bluerov2_acados_get_sim_in(bluerov2_sim_solver_capsule *capsule)
 {
     return capsule->acados_sim_in;
 };
 
-sim_out * bluerov2_acados_get_sim_out(sim_solver_capsule *capsule)
+sim_out * bluerov2_acados_get_sim_out(bluerov2_sim_solver_capsule *capsule)
 {
     return capsule->acados_sim_out;
 };
 
-void * bluerov2_acados_get_sim_dims(sim_solver_capsule *capsule)
+void * bluerov2_acados_get_sim_dims(bluerov2_sim_solver_capsule *capsule)
 {
     return capsule->acados_sim_dims;
 };
 
-sim_opts * bluerov2_acados_get_sim_opts(sim_solver_capsule *capsule)
+sim_opts * bluerov2_acados_get_sim_opts(bluerov2_sim_solver_capsule *capsule)
 {
     return capsule->acados_sim_opts;
 };
 
-sim_solver  * bluerov2_acados_get_sim_solver(sim_solver_capsule *capsule)
+sim_solver  * bluerov2_acados_get_sim_solver(bluerov2_sim_solver_capsule *capsule)
 {
     return capsule->acados_sim_solver;
 };

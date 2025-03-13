@@ -32,7 +32,7 @@
   <arg name="namespace" default="bluerov2"/>
   <!-- World Frame -->
   <arg name="world_frame" default="world"/>
-
+    <!-- SECTION load xacro file -->
   <group ns="$(arg namespace)">
     <group if="$(arg use_ned_frame)">
       <param name="robot_description"

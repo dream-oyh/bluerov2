@@ -1,8 +1,5 @@
 /*
- * Copyright 2019 Gianluca Frison, Dimitris Kouzoupis, Robin Verschueren,
- * Andrea Zanelli, Niels van Duijkeren, Jonathan Frey, Tommaso Sartor,
- * Branimir Novoselnik, Rien Quirynen, Rezart Qelibari, Dang Doan,
- * Jonas Koenemann, Yutao Chen, Tobias Schöls, Jonas Schlagenhauf, Moritz Diehl
+ * Copyright (c) The acados authors.
  *
  * This file is part of acados.
  *
@@ -56,13 +53,6 @@ const int *bluerov2_cost_y_0_fun_jac_ut_xt_sparsity_out(int);
 int bluerov2_cost_y_0_fun_jac_ut_xt_n_in(void);
 int bluerov2_cost_y_0_fun_jac_ut_xt_n_out(void);
 
-int bluerov2_cost_y_0_hess(const real_t** arg, real_t** res, int* iw, real_t* w, void *mem);
-int bluerov2_cost_y_0_hess_work(int *, int *, int *, int *);
-const int *bluerov2_cost_y_0_hess_sparsity_in(int);
-const int *bluerov2_cost_y_0_hess_sparsity_out(int);
-int bluerov2_cost_y_0_hess_n_in(void);
-int bluerov2_cost_y_0_hess_n_out(void);
-
 
 
 // Cost at path shooting node
@@ -80,13 +70,6 @@ const int *bluerov2_cost_y_fun_jac_ut_xt_sparsity_in(int);
 const int *bluerov2_cost_y_fun_jac_ut_xt_sparsity_out(int);
 int bluerov2_cost_y_fun_jac_ut_xt_n_in(void);
 int bluerov2_cost_y_fun_jac_ut_xt_n_out(void);
-
-int bluerov2_cost_y_hess(const real_t** arg, real_t** res, int* iw, real_t* w, void *mem);
-int bluerov2_cost_y_hess_work(int *, int *, int *, int *);
-const int *bluerov2_cost_y_hess_sparsity_in(int);
-const int *bluerov2_cost_y_hess_sparsity_out(int);
-int bluerov2_cost_y_hess_n_in(void);
-int bluerov2_cost_y_hess_n_out(void);
 
 
 
@@ -106,12 +89,6 @@ const int *bluerov2_cost_y_e_fun_jac_ut_xt_sparsity_out(int);
 int bluerov2_cost_y_e_fun_jac_ut_xt_n_in(void);
 int bluerov2_cost_y_e_fun_jac_ut_xt_n_out(void);
 
-int bluerov2_cost_y_e_hess(const real_t** arg, real_t** res, int* iw, real_t* w, void *mem);
-int bluerov2_cost_y_e_hess_work(int *, int *, int *, int *);
-const int *bluerov2_cost_y_e_hess_sparsity_in(int);
-const int *bluerov2_cost_y_e_hess_sparsity_out(int);
-int bluerov2_cost_y_e_hess_n_in(void);
-int bluerov2_cost_y_e_hess_n_out(void);
 
 
 

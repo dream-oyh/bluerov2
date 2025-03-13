@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="plot_traj" pkg="bluerov2_states" type="plot_traj.py" output="screen">
+    </node>
+</launch>

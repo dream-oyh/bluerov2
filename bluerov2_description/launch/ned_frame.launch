@@ -1,0 +1,7 @@
+<launch>
+    <!-- Static transform for NED frame -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="ned_frame_publisher"
+          args="0 0 0 1.5708 0 1.5708 bluerov2/base_link bluerov2/base_link_ned" >
+        <param name="rate" value="10" />  <!-- 降低发布频率 -->
+    </node>
+</launch> 

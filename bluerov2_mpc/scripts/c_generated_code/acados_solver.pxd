@@ -1,8 +1,5 @@
 #
-# Copyright 2019 Gianluca Frison, Dimitris Kouzoupis, Robin Verschueren,
-# Andrea Zanelli, Niels van Duijkeren, Jonathan Frey, Tommaso Sartor,
-# Branimir Novoselnik, Rien Quirynen, Rezart Qelibari, Dang Doan,
-# Jonas Koenemann, Yutao Chen, Tobias Schöls, Jonas Schlagenhauf, Moritz Diehl
+# Copyright (c) The acados authors.
 #
 # This file is part of acados.
 #
@@ -48,6 +45,7 @@ cdef extern from "acados_solver_bluerov2.h":
 
     int acados_update_params "bluerov2_acados_update_params"(nlp_solver_capsule * capsule, int stage, double *value, int np_)
     int acados_update_params_sparse "bluerov2_acados_update_params_sparse"(nlp_solver_capsule * capsule, int stage, int *idx, double *p, int n_update)
+    int acados_set_p_global_and_precompute_dependencies "bluerov2_acados_set_p_global_and_precompute_dependencies"(nlp_solver_capsule * capsule, double *value, int data_len)
     int acados_solve "bluerov2_acados_solve"(nlp_solver_capsule * capsule)
     int acados_reset "bluerov2_acados_reset"(nlp_solver_capsule * capsule, int reset_qp_solver_mem)
     int acados_free "bluerov2_acados_free"(nlp_solver_capsule * capsule)

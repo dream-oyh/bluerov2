@@ -42,7 +42,7 @@
      <arg name="tam_file" value="$(arg tam_file)" />
    </include>
 
-  <!-- This node just reads the trajectory and waypoint topics and publishes
+  <!-- NOTE This node just reads the trajectory and waypoint topics and publishes
        visualization markers for RViz -->
   <group if="$(arg gui_on)">
     <group ns="$(arg uuv_name)">

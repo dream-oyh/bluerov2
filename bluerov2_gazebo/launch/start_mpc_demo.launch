@@ -6,9 +6,9 @@
     <arg name="y" default="0"/>
     <arg name="z" default="-20"/>
     <arg name="yaw" default="0"/>
-
+    <arg name="traj" default="lemniscate"/>
     <arg name="use_ned_frame" default="false"/>
-
+    <arg name="is_export_data" default="false"/>
     <!-- Initialize the Gazebo world  -->
     <!--<include file="$(find uuv_gazebo_worlds)/launch/mangalia.launch"/>-->
     <include file="$(find bluerov2_description)/launch/ocean_waves.launch"/>
@@ -22,8 +22,17 @@
         <arg name="use_ned_frame" value="$(arg use_ned_frame)"/>
     </include>
 
-    <!-- Start the MPC controller with its default parameters for the bluerov2 vehicle  -->
-    <include file="$(find bluerov2_mpc)/launch/circle.launch"/> 
+
+    <!-- NOTE the nodes below are for plotting the trajectory and thrusters -->
+    <include file="$(find bluerov2_states)/launch/plot_traj.launch">
+    </include> 
+    
+
+    <include file="$(find bluerov2_states)/launch/plot_thruster.launch"/> 
+
+    <!-- NOTE Start the MPC controller with its default parameters for the bluerov2 vehicle
+        This is the key node about MPC controller and trajectory tracking  -->
+    <include file="$(find bluerov2_mpc)/launch/$(arg traj).launch"/> 
 
     <!-- Real-time 3d plot 
     <node
@@ -43,4 +52,8 @@
     <!-- Start RViz 
     <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find bluerov2_control)/rviz/bluerov2_control.rviz"/>
     --> 
+    <!-- NOTE export the simulation data -->
+    <group if="$(arg is_export_data)">
+        <include file="$(find bluerov2_states)/launch/record_data.launch"/>
+    </group>
 </launch>

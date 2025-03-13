@@ -36,6 +36,14 @@
             0 0 0 0 1.2481 0
             0 0 0 0 0 0.4006
           </added_mass>
+          <!-- <added_mass>
+            -2.983 0 0 0 0 0
+            0 -0.428 0 0 0 0
+            0 0 -4.794 0 0 0
+            0 0 0 17.456 0 0
+            0 0 0 0 23.094 0
+            0 0 0 0 0 -0.775
+          </added_mass> -->
           <!--
             The linear damping coefficients can be provided as a diagonal (6 elements)
             or a full matrix (36 coefficients), like the added-mass coefficients above
@@ -44,6 +52,9 @@
           <linear_damping>
             -11.7391 -20 -31.8678 -25 -44.9085 -5
           </linear_damping>
+          <!-- <linear_damping>
+            -11.838 -20.278 -32.111 -24.114 -24.975 -5.934
+          </linear_damping> -->
           <!--
             The linear damping coefficients proportional to the forward speed
             can be provided as a diagonal (6 elements) or a full matrix (36 coefficients),
@@ -82,6 +93,8 @@
           <water_level_plane_area>0.0</water_level_plane_area>
           -->
       </hydrodynamic_model>
+
+
     </link>
   </xacro:macro>
 </robot>

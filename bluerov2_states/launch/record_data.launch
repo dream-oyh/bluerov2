@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="data_recorder" pkg="bluerov2_states" type="data_recorder.py" output="screen">
+    </node>
+</launch> 

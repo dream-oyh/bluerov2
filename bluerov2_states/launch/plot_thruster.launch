@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="bluerov2_states" type="plot_thruster.py" name="plot_thruster" output="screen" />
+</launch>

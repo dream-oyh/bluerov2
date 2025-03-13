@@ -3,6 +3,7 @@
 #--------------------------------------
 
 import numpy as np
+import os
 
 # Parameters
 sample_time = 0.05                 #seconds
@@ -19,15 +20,15 @@ traj = np.zeros((int(duration/sample_time+1),16)) # x y z phi theta psi u v w p 
 t = np.arange(0,duration,sample_time)
 t = np.append(t, duration)
 
-traj[:,0] = amp*np.cos(t*frq)+x0    # x
+traj[:,0] = amp*np.cos(t*frq)+x0                   # x
 traj[:,1] = amp*np.sin(t*frq)*np.cos(t*frq)+y0     # y
-traj[:,2] = z0                      # z
+traj[:,2] = z0 + amp*np.cos(t*frq)                 # z
 traj[:,3] = 0                       # phi
 traj[:,4] = 0                       # theta
 traj[:,5] = 0                      # psi
 traj[:,6] = -amp*frq*np.sin(t*frq)  # u
 traj[:,7] = amp*frq*np.cos(t*2*frq) # v
-traj[:,8] = 0                       # w
+traj[:,8] = -amp*frq*np.sin(t*frq)  # w
 traj[:,9] = 0                       # p
 traj[:,10] = 0                      # q
 traj[:,11] = 0                      # r
@@ -36,4 +37,9 @@ traj[:,13] = 0                      # u2
 traj[:,14] = 0                      # u2
 traj[:,15] = 0                      # u2
 # write to txt
-np.savetxt('lemniscate.txt',traj,fmt='%f')
+# Get the directory of the current script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Create full path for output file
+output_path = os.path.join(current_dir, 'lemniscate.txt')
+# Save trajectory data
+np.savetxt(output_path, traj, fmt='%f')
